@@ -2,6 +2,7 @@
 
 API REST del proyecto semestral de DSY1104 Desarrollo Fullstack II (caso Forma A, Veterinaria San Marcos).
 
+- **Sección:** 003D
 - **Integrantes:** Nicolás Ortega, Martín Vásquez, Justin Galleguillos
 - **Frontend (React):** https://github.com/vrown7/veterinaria-san-marcos-v2.0
 - **Alcance:** usuarios, inicio de sesión con JWT y roles (semana 15). El catálogo de servicios y las citas se agregan en la semana 16.
@@ -54,7 +55,9 @@ Diagrama entidad-relación: pendiente (se sube a Drive junto con las tablas de s
 
 ## API
 
-Documentación en Swagger: `http://IP_PUBLICA_EC2:3000/api/docs`. El backend corre en una instancia EC2 de AWS Academy y su IP pública cambia cada vez que se inicia el laboratorio.
+Documentación en Swagger: http://23.22.139.177:3000/api/docs
+
+El backend corre en una instancia EC2 de AWS Academy. La dirección responde solo mientras el laboratorio está iniciado, y la IP pública cambia cada vez que se enciende la instancia (se actualiza aquí cuando cambia).
 
 | Método y ruta | Quién puede | Pantalla del frontend |
 |---|---|---|
