@@ -5,6 +5,7 @@ API REST del proyecto semestral de DSY1104 Desarrollo Fullstack II (caso Forma A
 - **Sección:** 003D
 - **Integrantes:** Nicolás Ortega, Martín Vásquez, Justin Galleguillos
 - **Frontend (React):** https://github.com/vrown7/veterinaria-san-marcos-v2.0
+- **Diagramas en Drive:** https://drive.google.com/drive/folders/1f7Mo_L7dXTzDSuxGKJQnbMqt2qrMnbI8?usp=sharing
 - **Alcance:** usuarios con inicio de sesión JWT y roles, catálogo de servicios veterinarios y citas (flujo principal), con la regla de no confirmar una cita en un horario ya ocupado.
 
 ## Estado del trabajo
@@ -68,7 +69,15 @@ Fuente editable: [`docs/diagrama-er.mmd`](docs/diagrama-er.mmd).
 | `src/utils` | Validaciones de entrada y errores de la API. |
 | `src/docs` | Especificación OpenAPI que muestra Swagger. |
 | `sql` y `scripts` | Creación de tablas, servicios iniciales y administrador inicial (`npm run db:init`). |
-| `docs` | Diagrama entidad-relación y diagrama de secuencia. |
+| `docs` | Diagramas entidad-relación, de secuencia y de arquitectura. |
+
+## Arquitectura y despliegue
+
+El frontend (puerto 5173) y el backend (puerto 3000) corren en la misma instancia EC2 `lab-backend`. La base PostgreSQL está en Amazon RDS sin acceso público: solo acepta conexiones en el puerto 5432 desde el grupo de seguridad de `lab-backend`.
+
+![Diagrama de arquitectura](docs/diagrama-arquitectura.png)
+
+Fuente editable: [`docs/diagrama-arquitectura.mmd`](docs/diagrama-arquitectura.mmd).
 
 ## API
 
@@ -114,7 +123,6 @@ eliminar un servicio que ya está en citas.
 - En cada solicitud protegida el backend verifica la firma, la vigencia, el emisor y el destinatario, y vuelve a leer al usuario y su rol desde la base de datos.
 - Un usuario que no es Administrador no puede ver ni modificar la cuenta de otra persona cambiando el id en la URL (403).
 - Las respuestas nunca incluyen la contraseña ni su hash.
-
 - CORS: solo los orígenes del frontend indicados en `CORS_ORIGEN` pueden llamar a la API desde el navegador. CORS no reemplaza la autorización: el token y el rol se revisan igual.
 - En el frontend el token se guarda en `sessionStorage` (ver el README del frontend).
 
@@ -123,8 +131,6 @@ eliminar un servicio que ya está en citas.
 ![Diagrama de secuencia del login](docs/diagrama-secuencia-login.png)
 
 Fuente editable: [`docs/diagrama-secuencia-login.mmd`](docs/diagrama-secuencia-login.mmd).
-
-Pendiente (mejora futura): límite de intentos de inicio de sesión.
 
 ## Cómo ejecutar
 
@@ -189,4 +195,4 @@ Probado el 22 de noviembre con frontend y backend en EC2 y la base en RDS (catá
 ## Mejoras futuras
 
 - Límite de intentos de inicio de sesión.
-- CRUD de categorías, reportes e historial en el backend (fuera del alcance de la EP3).
+- CRUD de categorías, reportes e historial en el backend (fuera del alcance de la EV3).
