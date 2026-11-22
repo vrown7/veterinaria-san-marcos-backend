@@ -14,6 +14,7 @@ function limpiar(datos) {
     nombre: String(datos.nombre || '').trim(),
     apellidos: String(datos.apellidos || '').trim(),
     correo: String(datos.correo || '').trim().toLowerCase(),
+    fechaNacimiento: datos.fechaNacimiento || null,
     region: String(datos.region || '').trim(),
     comuna: String(datos.comuna || '').trim(),
     direccion: String(datos.direccion || '').trim(),
@@ -51,4 +52,4 @@ async function iniciarSesion(correo, clave) {
   return { accessToken, tipo: 'Bearer', expiraEn: process.env.JWT_EXPIRA || '1h' };
 }
 
-module.exports = { registrar, iniciarSesion, RONDAS_HASH };
+module.exports = { registrar, iniciarSesion, limpiar, RONDAS_HASH };

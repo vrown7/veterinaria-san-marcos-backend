@@ -7,6 +7,7 @@ const { autenticar, permitirRoles } = require('../middlewares/auth.middleware');
 router.use(autenticar);
 
 router.get('/', permitirRoles('Administrador'), usuariosController.listar);
+router.post('/', permitirRoles('Administrador'), usuariosController.crear);
 router.get('/:id', usuariosController.obtener);
 router.put('/:id', usuariosController.modificar);
 router.delete('/:id', permitirRoles('Administrador'), usuariosController.desactivar);

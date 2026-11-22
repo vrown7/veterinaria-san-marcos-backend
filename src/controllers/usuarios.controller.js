@@ -11,6 +11,10 @@ async function listar(req, res) {
   res.status(200).json(await usuariosService.listar());
 }
 
+async function crear(req, res) {
+  res.status(201).json(await usuariosService.crear(req.body || {}));
+}
+
 async function obtener(req, res) {
   res.status(200).json(await usuariosService.obtener(leerId(req), req.usuario));
 }
@@ -24,4 +28,4 @@ async function desactivar(req, res) {
   res.status(204).send();
 }
 
-module.exports = { listar, obtener, modificar, desactivar };
+module.exports = { listar, crear, obtener, modificar, desactivar };
