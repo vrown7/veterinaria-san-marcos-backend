@@ -1,0 +1,12 @@
+flowchart LR
+    U["Navegador<br/>(Dueño, Recepcionista,<br/>Administrador)"]
+    subgraph VPC["AWS · VPC predeterminada (us-east-1)"]
+        subgraph EC2["EC2 lab-backend · grupo: puertos 22, 3000 y 5173"]
+            F["Frontend React + Vite<br/>puerto 5173"]
+            A["API REST Express<br/>puerto 3000<br/>/api/v1 y /api/docs (Swagger)"]
+        end
+        D[("PostgreSQL en Amazon RDS<br/>veterinaria-db · puerto 5432<br/>sin acceso público")]
+    end
+    U -- "HTTP :5173<br/>descarga la aplicación" --> F
+    U -- "fetch HTTP :3000 + JSON<br/>Authorization: Bearer JWT<br/>CORS: solo el origen del frontend" --> A
+    A -- "pg · consultas parametrizadas · SSL<br/>grupo rds-veterinaria:<br/>5432 solo desde lab-backend" --> D

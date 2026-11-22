@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    actor U as Usuario
+    participant R as React (FormularioLogin / AuthContext)
+    participant A as API Express (auth.routes / auth.service)
+    participant B as PostgreSQL (RDS)
+
+    U->>R: Escribe correo y contraseña y presiona "Iniciar sesión"
+    R->>R: Valida formato (correo y 4 a 10 caracteres)
+    R->>A: POST /api/v1/auth/login {correo, clave}
+    A->>B: SELECT usuario y rol por correo
+    B-->>A: usuario con clave_hash
+    A->>A: bcrypt.compare(clave, clave_hash)
+    alt Credenciales incorrectas o cuenta inactiva
+        A-->>R: 401 "Credenciales incorrectas"
+        R-->>U: "Correo o contraseña incorrectos."
+    else Credenciales correctas
+        A->>A: jwt.sign({rol}, sub, exp 1h, iss, aud)
+        A-->>R: 200 {accessToken}
+        R->>R: Guarda el token en sessionStorage
+        R->>A: GET /api/v1/auth/me (Authorization: Bearer token)
+        A->>A: auth.middleware verifica firma, exp, iss y aud
+        A->>B: SELECT usuario por id (sub)
+        B-->>A: usuario activo y su rol
+        A-->>R: 200 datos del usuario
+        R-->>U: Entra al panel o al inicio según su rol
+    end
+
+    Note over U,B: Solicitud protegida (por ejemplo, el Administrador lista usuarios)
+    U->>R: Abre /admin/usuarios
+    R->>R: RutaProtegida revisa sesión y rol
+    R->>A: GET /api/v1/usuarios (Authorization: Bearer token)
+    A->>A: autenticar: token ausente, alterado o vencido -> 401
+    A->>A: permitirRoles("Administrador"): otro rol -> 403
+    A->>B: SELECT usuarios
+    B-->>A: lista
+    A-->>R: 200 lista de usuarios
+    R-->>U: Muestra la tabla

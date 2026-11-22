@@ -1,0 +1,66 @@
+erDiagram
+    roles ||--o{ usuarios : "tiene"
+    usuarios ||--o{ citas : "solicita"
+    citas ||--|{ cita_items : "incluye"
+    servicios ||--o{ cita_items : "se pide en"
+
+    roles {
+        int id PK
+        varchar nombre UK "Administrador, Recepcionista, Dueño de mascota"
+    }
+    usuarios {
+        int id PK
+        varchar run
+        varchar nombre
+        varchar apellidos
+        varchar correo UK
+        varchar clave_hash "bcrypt"
+        int rol_id FK
+        date fecha_nacimiento "opcional"
+        varchar region
+        varchar comuna
+        varchar direccion
+        boolean activo
+        timestamp creado_en
+    }
+    servicios {
+        int id PK
+        varchar codigo UK
+        varchar categoria
+        varchar nombre
+        varchar especie
+        varchar duracion
+        int precio
+        int descuento "0 a 90"
+        int stock "cupos"
+        int stock_critico
+        varchar observaciones
+        varchar descripcion
+        varchar imagen
+    }
+    citas {
+        int id PK
+        int usuario_id FK
+        varchar estado "Pendiente, Confirmada, Reprogramada, Cancelada"
+        varchar nombre
+        varchar apellidos
+        varchar correo
+        varchar telefono
+        varchar mascota
+        varchar especie
+        date fecha
+        varchar hora
+        varchar comentario
+        int total
+        date propuesta_fecha
+        varchar propuesta_hora
+        timestamp creado_en
+    }
+    cita_items {
+        int id PK
+        int cita_id FK
+        int servicio_id FK
+        varchar nombre
+        int precio_unitario
+        int cantidad
+    }
