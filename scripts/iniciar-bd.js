@@ -1,4 +1,4 @@
-// Crea las tablas (sql/01_tablas.sql) y el administrador inicial.
+// Crea las tablas (carpeta sql), carga los servicios iniciales y el administrador inicial.
 // El correo y la clave del administrador salen del archivo .env, no del código.
 require('dotenv').config();
 const fs = require('fs');
@@ -8,9 +8,13 @@ const pool = require('../src/config/db');
 const { RONDAS_HASH } = require('../src/services/auth.service');
 
 async function iniciar() {
-  const sql = fs.readFileSync(path.join(__dirname, '..', 'sql', '01_tablas.sql'), 'utf8');
-  await pool.query(sql);
-  console.log('Tablas roles y usuarios listas.');
+  // Se ejecutan en orden los archivos de la carpeta sql.
+  const archivos = ['01_tablas.sql', '02_catalogo_citas.sql', '03_servicios_iniciales.sql'];
+  for (const archivo of archivos) {
+    const sql = fs.readFileSync(path.join(__dirname, '..', 'sql', archivo), 'utf8');
+    await pool.query(sql);
+  }
+  console.log('Tablas roles, usuarios, servicios, citas y cita_items listas.');
 
   const { ADMIN_CORREO, ADMIN_CLAVE } = process.env;
   if (!ADMIN_CORREO || !ADMIN_CLAVE) {

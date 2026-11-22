@@ -25,3 +25,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
   activo     BOOLEAN      NOT NULL DEFAULT TRUE,
   creado_en  TIMESTAMP    NOT NULL DEFAULT NOW()
 );
+
+-- Dato opcional del registro (se agrega aparte para que funcione también en una tabla ya creada).
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS fecha_nacimiento DATE;
